@@ -17,8 +17,8 @@
     specific language governing permissions and limitations
     under the License.
   -->
-<html>
-  <head>
+
+  
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
@@ -26,52 +26,180 @@
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>GalagoMusic</title>
 
-    <script src="js/jquery-2.1.1.js"></script>
-    <script src="js/jquery.color-RGBa-patch.js"></script>
+
+
+    <!-- jQuery -->
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+
+    <!-- Custom -->
+    <script type="text/javascript" src="js/magicline.js"></script>
+
+        <!-- PhoneGap -->
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <script src="js/magicline.js"></script>
-
+    
+    <script>
+    $(document).bind("mobileinit", function(){
+    $.mobile.allowCrossDomainPages = true;
+    $.mobile.support.cors = true;
+    });
+    </script>
+    
     <script type="text/javascript">
-      $(document).ready(function() {
-      $("body .splashScreen").delay(10).fadeOut(10, function() {
-      $("body .mainApp").fadeIn(1000);
-      $("#nav-bar .current_page_item a").mouseenter();
-      });
-      });
+        
+    document.addEventListener("deviceready",onDeviceReady,false);
+    var dataJSON;
+    var db = null;
+    
+    function onDeviceReady() 
+    {       
+        db = window.openDatabase("GalagoFavs", "1.0", "GalagoFavs", 200000);
+        db.transaction(createDB,successDB,errorDB);
+        getJSONData();
+    }
+    
+    function createDB(tx)
+    {
+        tx.executeSql("CREATE TABLE IF NOT EXISTS GalagoFavs (id unique)");
+    }
+    
+    function successDB()
+    {
+        
+    }
+    
+    function errorDB()
+    {
+        
+    }
+    
+    function queryDB(tx,index)
+    {
+        tx.executeSql("SELECT id FROM GalagoFavs WHERE id='"+index+"'",
+                        populateFavorite(index));
+    }
+    
+    function getJSONData()
+    {
+        // Ajax request
+        //
+        $url = "http://www.galagomusic.com/JSON/json_get_data.php";
+        $.getJSON($url, function(data) 
+                           {
+                           console.log("Successfully got data from GalagoMusic");
+                           dataJSON = data;
+                           populatePages();
+                           displayPages();
+                           });
+    }
+    
+    function populatePages() {
+        for (var i = 0; i < dataJSON.length; i++)
+        {
+            populateLatest(i);
+            populateDifficulty(i);
+            db.transaction(function(tx){queryDB(tx,i)});
+        }
+    }
+    
+    function populateLatest(index)
+    {
+        if (index < dataJSON.length)
+        {
+        console.log("Populate latest");
+        $("#latestPage").append(
+                            "<div class='itemCours'>\
+                                <div class='TitleArtist'>\
+                                    <a class='Title'>"
+                                    +dataJSON[index].Title+"</a><br/>\
+                                    <a class='Artist'>"
+                                    +dataJSON[index].Artist+"</a>\
+                                </div>\
+                                <div class='Difficulty'>DIFFICULTY<br/>"
+                                    +dataJSON[index].Difficulty+" / 10\
+                                </div>\
+                            </div>");
+        }
+    }
+    
+    function populateDifficulty(index)
+    {
+        if (index < dataJSON.length)
+        {
+            console.log("Populate Difficulty");
+            $("#difficultyPage #diff"+dataJSON[index].Difficulty).append(
+                            "<div class='itemCours'>\
+                                <div class='TitleArtist'>\
+                                    <a class='Title'>"
+                                    +dataJSON[index].Title+"</a><br/>\
+                                    <a class='Artist'>"
+                                    +dataJSON[index].Artist+"</a>\
+                                </div>\
+                                <div class='Difficulty'>"
+                                    +dataJSON[index].Difficulty+" / 10\
+                                </div>\
+                            </div>");
+        }
+    }
+    
+    function populateFavorite(index)
+    {
+        console.log("Populate Favorite");
+    }
+    
+    // Display main page after loading data
+    //
+    function displayPages() 
+    {
+        console.log("Show mainApp");
+        $("body .splashScreen").delay(10).fadeOut(10, function() {
+      	$("body .mainApp").fadeIn(10);
+      	$("#nav-bar .current_page_item a").mouseenter();
+      	});
+    }
+    
+    
     </script>
 
-  </head>
+  
   <body>
-    <div class="splashScreen">
+    <div class="splashScreen" data-role="page" id="splashScreen">
       <h1 id="title">GalagoMusic</h1>
     </div>
 
-    <div class="mainApp">
+    <div class="mainApp" data-role="page" id="mainApp">
 
-      <div class="nav-wrap">
+      <div class="nav-wrap" data-role="header">
         <center>
         <ul class="group" id="nav-bar">
-          <li class="current_page_item"><a href="#latest">Latest</a></li>
-          <li><a href="#difficulty">Difficulty</a></li>
-          <li><a href="#recent">Recent</a></li>
-          <li><a href="#donate">Donate</a></li>
+          <li class="current_page_item"><a href="#latestPage">Latest</a></li>
+          <li><a href="#difficultyPage">Difficulty</a></li>
+          <li><a href="#favoritePage">Favorite</a></li>
+          <li><a href="#donatePage">Donate</a></li>
         </ul>
         </center>
       </div>
 
-      <div id="pages">
-        <div id="latest" class="current">
-          Latest
+      <div id="pages" data-role="content">
+        <div id="latestPage" class="current" data-role="page">
         </div>
-        <div id="difficulty">
-          Difficulty
+        <div id="difficultyPage" data-role="page">
+            <div id="diff1" class="Test"><a class="difficultyTab">Difficulty 1 / 10</a></div>
+            <div id="diff2"><a class="difficultyTab">Difficulty 2 / 10</a></div>
+            <div id="diff3"><a class="difficultyTab">Difficulty 3 / 10</a></div>
+            <div id="diff4"><a class="difficultyTab">Difficulty 4 / 10</a></div>
+            <div id="diff5"><a class="difficultyTab">Difficulty 5 / 10</a></div>
+            <div id="diff6"><a class="difficultyTab">Difficulty 6 / 10</a></div>
+            <div id="diff7"><a class="difficultyTab">Difficulty 7 / 10</a></div>
+            <div id="diff8"><a class="difficultyTab">Difficulty 8 / 10</a></div>
+            <div id="diff9"><a class="difficultyTab">Difficulty 9 / 10</a></div>
+            <div id="diff10"><a class="difficultyTab">Difficulty 10 / 10</a></div>
         </div>
-        <div id="recent">
-          Recent
+        <div id="favoritePage" data-role="page">
         </div>
-        <div id="donate">
-          Donate
+        <div id="donatePage" data-role="page">
         </div>
       </div>
     </div>
@@ -99,6 +227,6 @@
     
       window.addEventListener('orientationchange',onOrientationChanged);
     </script>
-
+   
   </body>
-</html>
+
