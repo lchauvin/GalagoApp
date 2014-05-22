@@ -36,7 +36,7 @@ body {
 
 /* Portrait layout (default) */
 
-.splashScreen {
+#splashScreen {
     position:absolute;             /* position in the center of the screen */
     height:100%;                   /* text area height */
     width:100%;                   /* text area width */
@@ -65,7 +65,7 @@ body {
 	src:url("../res/font/Signarita.ttf") format("truetype");	
 }
 
-.splashScreen #title {
+#splashScreen #title {
     font-size:24px;
     font-weight:normal;
     font-family:"TitleFont";
@@ -79,7 +79,7 @@ body {
     vertical-align:middle;
 }
 
-.mainApp {
+#mainApp {
     display:none;
 }
 
@@ -118,7 +118,7 @@ body {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
-
+/*
 #pages > div {
     display: none;
     padding-top:3%;
@@ -134,7 +134,7 @@ body {
     border-bottom:2px solid white;
 }
 
-#nav-bar {
+.nav-bar {
     margin:0 auto;
     padding:0;
     list-style:none;
@@ -142,11 +142,11 @@ body {
     width:100%;
 }
 
-#nav-bar li {
+.nav-bar li {
     display:inline-block;
 }
 
-#nav-bar a {
+.nav-bar a {
     color:#fff;
     font-size:14px;
     float:left;
@@ -156,7 +156,7 @@ body {
     text-align:center;
 }
 
-#nav-bar a:hover {
+.nav-bar a:hover {
     color:white;
 }
 
@@ -172,6 +172,7 @@ body {
 .current_page_item a {
     color:white !important;
 }
+*/
 
 .itemCours {
     border:1px solid #b51f29;
@@ -180,9 +181,9 @@ body {
     margin-right:auto;
     width:95%;
     overflow:auto;
-    display:table;
     margin-bottom:2%;
     padding-left:1%;
+    display:table;
 }
 
 .itemCours a {

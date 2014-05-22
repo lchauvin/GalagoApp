@@ -23,29 +23,32 @@
     <meta name="format-detection" content="telephone=no" />
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>GalagoMusic</title>
-
-
-
+    
     <!-- jQuery -->
-    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />-->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script type="text/javascript">
+    $(document).bind("mobileinit", function(){
+    $.mobile.allowCrossDomainPages = true;
+    $.mobile.support.cors = true;
+    //$.mobile.defaultPageTransition='none';
+    //$.mobile.defaultDialogTransition='none';
+    $.mobile.buttonMarkup.hoverDelay=0;
+    //$.mobile.ignoreContentEnabled="true";
+    });
+    </script>
+
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
 
     <!-- Custom -->
     <script type="text/javascript" src="js/magicline.js"></script>
 
-        <!-- PhoneGap -->
+    <!-- PhoneGap -->
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    
-    <script>
-    $(document).bind("mobileinit", function(){
-    $.mobile.allowCrossDomainPages = true;
-    $.mobile.support.cors = true;
-    });
-    </script>
     
     <script type="text/javascript">
         
@@ -98,18 +101,18 @@
     function populatePages() {
         for (var i = 0; i < dataJSON.length; i++)
         {
-            populateLatest(i);
+            populateRecent(i);
             populateDifficulty(i);
-            db.transaction(function(tx){queryDB(tx,i)});
+            db.transaction(function(tx){queryDB(tx,i);});
         }
     }
     
-    function populateLatest(index)
+    function populateRecent(index)
     {
         if (index < dataJSON.length)
         {
-        console.log("Populate latest");
-        $("#latestPage").append(
+        console.log("Populate recent");
+        $("#recentPage .pageContent").append(
                             "<div class='itemCours'>\
                                 <div class='TitleArtist'>\
                                     <a class='Title'>"
@@ -129,7 +132,7 @@
         if (index < dataJSON.length)
         {
             console.log("Populate Difficulty");
-            $("#difficultyPage #diff"+dataJSON[index].Difficulty).append(
+            $("#difficultyPage .pageContent #diff"+dataJSON[index].Difficulty).append(
                             "<div class='itemCours'>\
                                 <div class='TitleArtist'>\
                                     <a class='Title'>"
@@ -154,52 +157,110 @@
     function displayPages() 
     {
         console.log("Show mainApp");
-        $("body .splashScreen").delay(10).fadeOut(10, function() {
-      	$("body .mainApp").fadeIn(10);
-      	$("#nav-bar .current_page_item a").mouseenter();
+        //$("#recentPage .pageContent .itemCours:lt(5)").css("display","table");
+        $("body #splashScreen").fadeOut(10, function() {
+      	$("body #mainApp").fadeIn(10);
       	});
+
     }
-    
     
     </script>
 
   
   <body>
-    <div class="splashScreen" data-role="page" id="splashScreen">
-      <h1 id="title">GalagoMusic</h1>
+    <!-- Splash Screen -->  
+    <div id="splashScreen" data-role="none">
+      <h1 id="title">GalagoMusic</h1><br/>
     </div>
 
-    <div class="mainApp" data-role="page" id="mainApp">
-
-      <div class="nav-wrap" data-role="header">
-        <center>
-        <ul class="group" id="nav-bar">
-          <li class="current_page_item"><a href="#latestPage">Latest</a></li>
-          <li><a href="#difficultyPage">Difficulty</a></li>
-          <li><a href="#favoritePage">Favorite</a></li>
-          <li><a href="#donatePage">Donate</a></li>
-        </ul>
-        </center>
-      </div>
-
-      <div id="pages" data-role="content">
-        <div id="latestPage" class="current" data-role="page">
+    <!-- Main Application -->
+    <div id="mainApp">
+      <div id="pages">
+          
+        <!-- Recent Page -->  
+        <div id="recentPage" class="current" data-role="page">
+            
+            <div data-role="header" data-position="fixed" data-id="header">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#recentPage" class="ui-btn-active ui-state-persist">Recent</a></li>
+                        <li><a href="#difficultyPage">Difficulty</a></li>
+                        <li><a href="#favoritePage">Favorite</a></li>
+                        <li><a href="#donatePage">Donate</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pageContent" data-role="content">
+            </div>
+            
         </div>
+        
+        <!-- Difficulty Page -->
         <div id="difficultyPage" data-role="page">
-            <div id="diff1" class="Test"><a class="difficultyTab">Difficulty 1 / 10</a></div>
-            <div id="diff2"><a class="difficultyTab">Difficulty 2 / 10</a></div>
-            <div id="diff3"><a class="difficultyTab">Difficulty 3 / 10</a></div>
-            <div id="diff4"><a class="difficultyTab">Difficulty 4 / 10</a></div>
-            <div id="diff5"><a class="difficultyTab">Difficulty 5 / 10</a></div>
-            <div id="diff6"><a class="difficultyTab">Difficulty 6 / 10</a></div>
-            <div id="diff7"><a class="difficultyTab">Difficulty 7 / 10</a></div>
-            <div id="diff8"><a class="difficultyTab">Difficulty 8 / 10</a></div>
-            <div id="diff9"><a class="difficultyTab">Difficulty 9 / 10</a></div>
-            <div id="diff10"><a class="difficultyTab">Difficulty 10 / 10</a></div>
+            
+            <div data-role="header" data-position="fixed" data-id="header">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#recentPage">Recent</a></li>
+                        <li><a href="#difficultyPage" class="ui-btn-active ui-state-persist">Difficulty</a></li>
+                        <li><a href="#favoritePage">Favorite</a></li>
+                        <li><a href="#donatePage">Donate</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pageContent" data-role="content">
+                <div id="diff1"><a class="difficultyTab">Difficulty 1 / 10</a></div>
+                <div id="diff2"><a class="difficultyTab">Difficulty 2 / 10</a></div>
+                <div id="diff3"><a class="difficultyTab">Difficulty 3 / 10</a></div>
+                <div id="diff4"><a class="difficultyTab">Difficulty 4 / 10</a></div>
+                <div id="diff5"><a class="difficultyTab">Difficulty 5 / 10</a></div>
+                <div id="diff6"><a class="difficultyTab">Difficulty 6 / 10</a></div>
+                <div id="diff7"><a class="difficultyTab">Difficulty 7 / 10</a></div>
+                <div id="diff8"><a class="difficultyTab">Difficulty 8 / 10</a></div>
+                <div id="diff9"><a class="difficultyTab">Difficulty 9 / 10</a></div>
+                <div id="diff10"><a class="difficultyTab">Difficulty 10 / 10</a></div>
+            </div>
+            
         </div>
+        
+        <!-- Favorite Page -->
         <div id="favoritePage" data-role="page">
+            
+            <div data-role="header" data-position="fixed" data-id="header">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#recentPage">Recent</a></li>
+                        <li><a href="#difficultyPage">Difficulty</a></li>
+                        <li><a href="#favoritePage" class="ui-btn-active ui-state-persist">Favorite</a></li>
+                        <li><a href="#donatePage">Donate</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pageContent" data-role="content">
+            </div>
+            
         </div>
+        
+        <!-- Donate Page -->
         <div id="donatePage" data-role="page">
+            
+            <div data-role="header" data-position="fixed" data-id="header">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#recentPage">Recent</a></li>
+                        <li><a href="#difficultyPage">Difficulty</a></li>
+                        <li><a href="#favoritePage">Favorite</a></li>
+                        <li><a href="#donatePage" class="ui-btn-active ui-state-persist">Donate</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pageContent" data-role="content">
+            </div>
+            
         </div>
       </div>
     </div>
@@ -207,26 +268,10 @@
     <script type="text/javascript">
       app.initialize();
     </script>
-
-    <script type="text/javascript">
-      $('#nav-bar li').on('click', function(e){
-      e.preventDefault();
-      var nextPage = $(e.target.hash);
-      $("#pages .current").removeClass("current");
-      nextPage.addClass("current");
-      $("#nav-bar .current_page_item").removeClass("current_page_item");
-      $(this).addClass("current_page_item");
-      });
-    </script>
-
-    <script type="text/javascript">
-      function onOrientationChanged()
-      {
-      $("#nav-bar .current_page_item a").mouseover();
-      }
     
-      window.addEventListener('orientationchange',onOrientationChanged);
+    <script type="text/javascript">
+
     </script>
-   
+    
   </body>
 

@@ -22,9 +22,7 @@
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/js \
-/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/SQL Queries.txt \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/cordova_plugins.js \
-/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/index_backup.html \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/spec \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/icon.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/config.xml \
