@@ -42,7 +42,8 @@ body {
     width:100%;                   /* text area width */
     text-align:center;
     padding:0px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    display:table;
+    /*display:table;*/
+    display:none;
 
     background-color:#DC8E53;
     /* IE10 Consumer Preview */ 
@@ -80,7 +81,7 @@ body {
 }
 
 #mainApp {
-    display:none;
+    /*display:none;*/
 }
 
 .event {
@@ -118,61 +119,35 @@ body {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
-/*
-#pages > div {
-    display: none;
-    padding-top:3%;
-}
- 
-#pages > div.current {
-    display: block;
+
+.ui-bar-c {
+    border:0 !important;
+    margin:0 !important;
+    padding:0 !important;
 }
 
-.nav-wrap {
-    margin:0 auto;
-    background-color:#efc6a2;
-    border-bottom:2px solid white;
+.ui-navbar {
+    border:0 !important;
+    margin:0 !important;
+    padding:0 !important; 
 }
 
-.nav-bar {
-    margin:0 auto;
-    padding:0;
-    list-style:none;
-    position:relative;
-    width:100%;
+.ui-btn {
+    background:#efc6a2 !important;
+    border:0 !important;
+    color:#ffffff !important;
+    text-shadow:0 0 0!important;
+    font-weight:normal !important;
+    text-transform: uppercase;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    width:100% !important;
+    border-bottom:3px solid white !important;
 }
 
-.nav-bar li {
-    display:inline-block;
+.ui-btn-active {
+    border-bottom:3px solid red !important;
 }
-
-.nav-bar a {
-    color:#fff;
-    font-size:14px;
-    float:left;
-    padding:6px 10px 4px 10px;
-    text-decoration:none;
-    text-transform:uppercase;
-    text-align:center;
-}
-
-.nav-bar a:hover {
-    color:white;
-}
-
-#magic-line {
-    position:absolute;
-    bottom:-2px;
-    left:0;
-    width:100px;
-    height:2px;
-    background:#fe4902;
-}
-
-.current_page_item a {
-    color:white !important;
-}
-*/
 
 .itemCours {
     border:1px solid #b51f29;
@@ -184,9 +159,10 @@ body {
     margin-bottom:2%;
     padding-left:1%;
     display:table;
+    margin-bottom:3%;
 }
 
-.itemCours a {
+.itemCours span {
     font-size:15px;
 }
 
@@ -194,16 +170,18 @@ body {
     width:82%;
     margin-left:1%;
     display:table-cell;
+    padding-bottom:1.5%;
+    padding-top:1.5%;
 }
 
 .itemCours .Title {
     color:black;
     font-weight:bold;
-
 }
 
 .itemCours .Artist {
     color:white;
+    font-weight: normal;
 }
 
 .itemCours .Difficulty {
@@ -218,16 +196,21 @@ body {
 }
 
 #difficultyPage {
-    width:100%;
 }
 
 #difficultyPage .itemCours {
+    display:none;
+}
+
+.pageContent {
+    padding-left:0;
+    padding-right:0%;
+    margin-left:0;
+    margin-right:0;
 }
 
 .difficultyTab {
-    margin-left:auto;
-    margin-right:auto;
-    width:95%;
+    width:98%;
     overflow:auto;
     display:table;
     margin-bottom:2%;
@@ -235,4 +218,9 @@ body {
     color:white;
     padding:2%;
     font-size: 15px;
+}
+
+.testtest {
+    margin:0 0 0 0;
+    padding:0 0 0 0;
 }

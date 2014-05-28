@@ -44,7 +44,8 @@
 
     <!-- Custom -->
     <script type="text/javascript" src="js/magicline.js"></script>
-
+    <script type="text/javascript" src="js/cssToggle.js"></script>
+    
     <!-- PhoneGap -->
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <script type="text/javascript" src="phonegap.js"></script>
@@ -57,7 +58,7 @@
     var db = null;
     
     function onDeviceReady() 
-    {       
+    {    
         db = window.openDatabase("GalagoFavs", "1.0", "GalagoFavs", 200000);
         db.transaction(createDB,successDB,errorDB);
         getJSONData();
@@ -115,10 +116,10 @@
         $("#recentPage .pageContent").append(
                             "<div class='itemCours'>\
                                 <div class='TitleArtist'>\
-                                    <a class='Title'>"
-                                    +dataJSON[index].Title+"</a><br/>\
-                                    <a class='Artist'>"
-                                    +dataJSON[index].Artist+"</a>\
+                                    <span class='Title'>"
+                                    +dataJSON[index].Title+"</span><br/>\
+                                    <span class='Artist'>"
+                                    +dataJSON[index].Artist+"</span>\
                                 </div>\
                                 <div class='Difficulty'>DIFFICULTY<br/>"
                                     +dataJSON[index].Difficulty+" / 10\
@@ -135,12 +136,12 @@
             $("#difficultyPage .pageContent #diff"+dataJSON[index].Difficulty).append(
                             "<div class='itemCours'>\
                                 <div class='TitleArtist'>\
-                                    <a class='Title'>"
-                                    +dataJSON[index].Title+"</a><br/>\
-                                    <a class='Artist'>"
-                                    +dataJSON[index].Artist+"</a>\
+                                    <span class='Title'>"
+                                    +dataJSON[index].Title+"</span><br/>\
+                                    <span class='Artist'>"
+                                    +dataJSON[index].Artist+"</span>\
                                 </div>\
-                                <div class='Difficulty'>"
+                                <div class='Difficulty'>DIFFICULTY<br />"
                                     +dataJSON[index].Difficulty+" / 10\
                                 </div>\
                             </div>");
@@ -162,8 +163,7 @@
       	$("body #mainApp").fadeIn(10);
       	});
 
-    }
-    
+    }  
     </script>
 
   
@@ -180,7 +180,7 @@
         <!-- Recent Page -->  
         <div id="recentPage" class="current" data-role="page">
             
-            <div data-role="header" data-position="fixed" data-id="header">
+            <div data-role="header" data-position="fixed" data-id="header" data-theme="c">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#recentPage" class="ui-btn-active ui-state-persist">Recent</a></li>
@@ -199,7 +199,7 @@
         <!-- Difficulty Page -->
         <div id="difficultyPage" data-role="page">
             
-            <div data-role="header" data-position="fixed" data-id="header">
+            <div data-role="header" data-position="fixed" data-id="header" data-theme="c">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#recentPage">Recent</a></li>
@@ -211,16 +211,16 @@
             </div>
             
             <div class="pageContent" data-role="content">
-                <div id="diff1"><a class="difficultyTab">Difficulty 1 / 10</a></div>
-                <div id="diff2"><a class="difficultyTab">Difficulty 2 / 10</a></div>
-                <div id="diff3"><a class="difficultyTab">Difficulty 3 / 10</a></div>
-                <div id="diff4"><a class="difficultyTab">Difficulty 4 / 10</a></div>
-                <div id="diff5"><a class="difficultyTab">Difficulty 5 / 10</a></div>
-                <div id="diff6"><a class="difficultyTab">Difficulty 6 / 10</a></div>
-                <div id="diff7"><a class="difficultyTab">Difficulty 7 / 10</a></div>
-                <div id="diff8"><a class="difficultyTab">Difficulty 8 / 10</a></div>
-                <div id="diff9"><a class="difficultyTab">Difficulty 9 / 10</a></div>
-                <div id="diff10"><a class="difficultyTab">Difficulty 10 / 10</a></div>
+                <div id="diff1" class="testtest"><span class="difficultyTab">Difficulty 1 / 10</span></div>
+                <div id="diff2"><span class="difficultyTab">Difficulty 2 / 10</span></div>
+                <div id="diff3"><span class="difficultyTab">Difficulty 3 / 10</span></div>
+                <div id="diff4"><span class="difficultyTab">Difficulty 4 / 10</span></div>
+                <div id="diff5"><span class="difficultyTab">Difficulty 5 / 10</span></div>
+                <div id="diff6"><span class="difficultyTab">Difficulty 6 / 10</span></div>
+                <div id="diff7"><span class="difficultyTab">Difficulty 7 / 10</span></div>
+                <div id="diff8"><span class="difficultyTab">Difficulty 8 / 10</span></div>
+                <div id="diff9"><span class="difficultyTab">Difficulty 9 / 10</span></div>
+                <div id="diff10"><span class="difficultyTab">Difficulty 10 / 10</span></div>
             </div>
             
         </div>
@@ -228,7 +228,7 @@
         <!-- Favorite Page -->
         <div id="favoritePage" data-role="page">
             
-            <div data-role="header" data-position="fixed" data-id="header">
+            <div data-role="header" data-position="fixed" data-id="header" data-theme="c">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#recentPage">Recent</a></li>
@@ -247,7 +247,7 @@
         <!-- Donate Page -->
         <div id="donatePage" data-role="page">
             
-            <div data-role="header" data-position="fixed" data-id="header">
+            <div data-role="header" data-position="fixed" data-id="header" data-theme="c">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#recentPage">Recent</a></li>
@@ -270,7 +270,15 @@
     </script>
     
     <script type="text/javascript">
-
+        $(".difficultyTab").on("touchstart",function(event){
+            var parent = $(event.target).closest("div");
+            /*
+            $(parent).children("div").cssToggle({
+               duration:"1000"
+            });
+            */
+           $(parent).children("div").slideToggle();
+        });
     </script>
     
   </body>
