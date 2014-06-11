@@ -150,6 +150,7 @@ body {
 }
 
 .itemCours {
+    border-spacing: 0;
     border:1px solid #b51f29;
     background-color:#efc6a2;
     margin-left:auto;
@@ -157,9 +158,18 @@ body {
     width:95%;
     overflow:auto;
     margin-bottom:2%;
-    padding-left:1%;
     display:table;
-    margin-bottom:3%;
+    padding-bottom: 0;
+}
+
+.itemCours tbody {
+    padding:0 0 0 0;
+    margin:0 0 0 0;
+}
+
+.itemCours .itemLine {
+    padding:0 0 0 0;
+    margin:0 0 0 0; 
 }
 
 .itemCours span {
@@ -169,6 +179,7 @@ body {
 .itemCours .TitleArtist {
     width:82%;
     margin-left:1%;
+    padding-left:1%;
     display:table-cell;
     padding-bottom:1.5%;
     padding-top:1.5%;
@@ -195,10 +206,14 @@ body {
     padding:0 1% 0 1%;
 }
 
-#difficultyPage {
+.itemCours .WhiteLine td {
+    width:100%;
+    padding:0 0 0 0;
+    margin: 0 0 0 0;
+    border:2px solid #ffffff;
 }
 
-#difficultyPage .itemCours {
+.itemCours .coursProperties {
     display:none;
 }
 
@@ -210,7 +225,7 @@ body {
 }
 
 .difficultyTab {
-    width:98%;
+    width:100%;
     overflow:auto;
     display:table;
     margin-bottom:2%;
@@ -220,7 +235,18 @@ body {
     font-size: 15px;
 }
 
-.testtest {
-    margin:0 0 0 0;
-    padding:0 0 0 0;
+.coursProperties {
+    font-size:13px;
+}
+
+.watchButton{
+    text-align:center;
+    border:1px solid white;
+    background-color:white;
+}
+
+.watchButton a {
+    color:#b51f29 !important;   
+    font-weight: normal !important;
+    font-size: 15px;
 }

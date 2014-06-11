@@ -113,19 +113,37 @@
         if (index < dataJSON.length)
         {
         console.log("Populate recent");
-        $("#recentPage .pageContent").append(
-                            "<div class='itemCours'>\
-                                <div class='TitleArtist'>\
-                                    <span class='Title'>"
-                                    +dataJSON[index].Title+"</span><br/>\
-                                    <span class='Artist'>"
-                                    +dataJSON[index].Artist+"</span>\
-                                </div>\
-                                <div class='Difficulty'>DIFFICULTY<br/>"
-                                    +dataJSON[index].Difficulty+" / 10\
-                                </div>\
-                            </div>");
+        
+        var newItem = $("<table class='itemCours'>\
+                                <tr class='itemLine'>\
+                                    <td class='TitleArtist'>\
+                                        <span class='Title'>"+dataJSON[index].Title+"</span><br/>\
+                                        <span class='Artist'>"+dataJSON[index].Artist+"</span>\
+                                    </td>\
+                                    <td class='Difficulty'>DIFFICULTY<br/>"+dataJSON[index].Difficulty+" / 10\
+                                    </td>\
+                                </tr>\
+                                <tr class='coursProperties WhiteLine'>\
+                                    <td></td><td></td>\
+                                </tr>\
+                                <tr class='coursProperties'>\
+                                    <td>Duree</td>\
+                                    <td>Favorite</td>\
+                                </tr>\
+                                <tr class='coursProperties'>\
+                                    <td>Guitare Acoustique</td>\
+                                </tr>\
+                                <tr class='coursProperties'>\
+                                    <td colspan='2' class='watchButton'><a>Watch</a></td>\
+                                </tr>\
+                            </table>");
+        
+        $("#recentPage .pageContent").append(newItem);
+        newItem.on('click', function(){
+            $(this).find(".coursProperties").fadeToggle();
+        });
         }
+        
     }
     
     function populateDifficulty(index)
@@ -144,7 +162,7 @@
                                 <div class='Difficulty'>DIFFICULTY<br />"
                                     +dataJSON[index].Difficulty+" / 10\
                                 </div>\
-                            </div>");
+                            </div>").children(".itemCours").hide();
         }
     }
     
@@ -211,7 +229,7 @@
             </div>
             
             <div class="pageContent" data-role="content">
-                <div id="diff1" class="testtest"><span class="difficultyTab">Difficulty 1 / 10</span></div>
+                <div id="diff1"><span class="difficultyTab">Difficulty 1 / 10</span></div>
                 <div id="diff2"><span class="difficultyTab">Difficulty 2 / 10</span></div>
                 <div id="diff3"><span class="difficultyTab">Difficulty 3 / 10</span></div>
                 <div id="diff4"><span class="difficultyTab">Difficulty 4 / 10</span></div>
@@ -270,14 +288,18 @@
     </script>
     
     <script type="text/javascript">
+        $(".itemCours").on("touchstart", function(event){
+            event.preventDefault();
+            var parent = $(event.target).closest("table");
+            $(parent).children(".coursProperties").slideToggle();
+            alert("test");
+        });
+    </script>   
+    
+    <script type="text/javascript">
         $(".difficultyTab").on("touchstart",function(event){
-            var parent = $(event.target).closest("div");
-            /*
-            $(parent).children("div").cssToggle({
-               duration:"1000"
-            });
-            */
-           $(parent).children("div").slideToggle();
+           var parent = $(event.target).closest("div");
+           $(parent).children(".itemCours").fadeToggle();
         });
     </script>
     
