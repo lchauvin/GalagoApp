@@ -167,7 +167,7 @@ body {
     margin:0 0 0 0;
 }
 
-.itemCours .itemLine {
+.itemCours .itemCoursPreview {
     padding:0 0 0 0;
     margin:0 0 0 0; 
 }
@@ -176,7 +176,7 @@ body {
     font-size:15px;
 }
 
-.itemCours .TitleArtist {
+.itemCours .itemCoursTitleArtist {
     width:82%;
     margin-left:1%;
     padding-left:1%;
@@ -185,17 +185,17 @@ body {
     padding-top:1.5%;
 }
 
-.itemCours .Title {
+.itemCours .itemCoursTitle {
     color:black;
     font-weight:bold;
 }
 
-.itemCours .Artist {
+.itemCours .itemCoursArtist {
     color:white;
     font-weight: normal;
 }
 
-.itemCours .Difficulty {
+.itemCours .itemCoursDifficulty {
     background-color:#b51f29;
     color:white;
     vertical-align:middle;
@@ -206,7 +206,7 @@ body {
     padding:0 1% 0 1%;
 }
 
-.itemCours .WhiteLine td {
+.itemCours .itemCoursWhiteLine td {
     width:100%;
     padding:0 0 0 0;
     margin: 0 0 0 0;
@@ -239,14 +239,19 @@ body {
     font-size:13px;
 }
 
-.watchButton{
+.itemCoursFavorite {
+    text-align: right;
+}
+
+.itemCoursWatch{
     text-align:center;
     border:1px solid white;
     background-color:white;
 }
 
-.watchButton a {
+.itemCoursWatch a {
+    background-color:white;
     color:#b51f29 !important;   
-    font-weight: normal !important;
+    font-weight: bold !important;
     font-size: 15px;
 }

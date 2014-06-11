@@ -115,26 +115,26 @@
         console.log("Populate recent");
         
         var newItem = $("<table class='itemCours'>\
-                                <tr class='itemLine'>\
-                                    <td class='TitleArtist'>\
-                                        <span class='Title'>"+dataJSON[index].Title+"</span><br/>\
-                                        <span class='Artist'>"+dataJSON[index].Artist+"</span>\
+                                <tr class='itemCoursPreview'>\
+                                    <td class='itemCoursTitleArtist'>\
+                                        <span class='itemCoursTitle'>"+dataJSON[index].Title+"</span><br/>\
+                                        <span class='itemCoursArtist'>"+dataJSON[index].Artist+"</span>\
                                     </td>\
-                                    <td class='Difficulty'>DIFFICULTY<br/>"+dataJSON[index].Difficulty+" / 10\
+                                    <td class='itemCoursDifficulty'>DIFFICULTY<br/>"+dataJSON[index].Difficulty+" / 10\
                                     </td>\
                                 </tr>\
-                                <tr class='coursProperties WhiteLine'>\
+                                <tr class='coursProperties itemCoursWhiteLine'>\
                                     <td></td><td></td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
-                                    <td>Duree</td>\
-                                    <td>Favorite</td>\
+                                    <td class='itemCoursDuration'>Duree</td>\
+                                    <td class='itemCoursFavorite'>Favorite</td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
-                                    <td>Guitare Acoustique</td>\
+                                    <td class='itemCoursGuitar'>Guitare Acoustique</td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
-                                    <td colspan='2' class='watchButton'><a>Watch</a></td>\
+                                    <td colspan='2' class='itemCoursWatch'><a>Watch</a></td>\
                                 </tr>\
                             </table>");
         
