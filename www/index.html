@@ -153,8 +153,7 @@
          });
         
         newItem.find(".itemCoursTab").on('click',function(){
-            //alert(encodeURIComponent(dataJSON[index].Tablature));
-            //window.open("https://docs.google.com/viewer?url="+encodeURI(dataJSON[index].Tablature)+"&embedded=true");
+            navigator.app.loadUrl(dataJSON[index].Tablature,{openExternal:true});
         });
         
         newItem.find(".itemCoursWatch").on('click',function(){ 
