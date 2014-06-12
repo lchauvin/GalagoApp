@@ -20,6 +20,9 @@
     "installed_plugins": {
         "org.apache.cordova.splashscreen": {
             "PACKAGE_NAME": "com.galago.music"
+        },
+        "com.kernix.pdfviewer": {
+            "PACKAGE_NAME": "com.galago.music"
         }
     },
     "dependent_plugins": {}

@@ -89,7 +89,7 @@
     {
         // Ajax request
         //
-        $url = "http://www.galagomusic.com/JSON/json_get_data.php";
+        $url = "http://www.galagomusic.com/JSON/json_get_data.php?user=GalagoTeam&password=GalaTeam";
         $.getJSON($url, function(data) 
                            {
                            console.log("Successfully got data from GalagoMusic");
@@ -127,21 +127,41 @@
                                     <td></td><td></td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
-                                    <td class='itemCoursDuration'>Duree</td>\
-                                    <td class='itemCoursFavorite'>Favorite</td>\
+                                    <td class='itemCoursDuration'><img src='img/icone-timer.png'></img><span> "+dataJSON[index].Duration+"</span></td>\
+                                    <td class='itemCoursFavorite'><span>Favorite</span></td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
-                                    <td class='itemCoursGuitar'>Guitare Acoustique</td>\
+                                    <td class='itemCoursGuitar'><span>"+dataJSON[index].Instrument+"</span></td>\
+                                </tr>"+ (dataJSON[index].Tablature === "" ? "" : 
+                                "<tr class='coursProperties'>\
+                                    <td colspan='2' class='itemCoursTab'><a>Download Tablature</a></td>\
                                 </tr>\
-                                <tr class='coursProperties'>\
-                                    <td colspan='2' class='itemCoursWatch'><a>Watch</a></td>\
+                                <tr class='coursProperties itemCoursSpacer'>\
+                                    <td></td><td></td>\
+                                </tr>") +
+                                "<tr class='coursProperties'>\
+                                    <td colspan='2' class='itemCoursWatch'><a>Watch Video</a></td>\
+                                </tr>\
+                                <tr class='coursProperties itemCoursSpacer'>\
+                                    <td></td><td></td>\
                                 </tr>\
                             </table>");
         
         $("#recentPage .pageContent").append(newItem);
-        newItem.on('click', function(){
-            $(this).find(".coursProperties").fadeToggle();
+        newItem.find(".itemCoursTitleArtist").on('click', function(){
+            $(newItem).find(".coursProperties").fadeToggle();
+         });
+        
+        newItem.find(".itemCoursTab").on('click',function(){
+            //alert(encodeURIComponent(dataJSON[index].Tablature));
+            //window.open("https://docs.google.com/viewer?url="+encodeURI(dataJSON[index].Tablature)+"&embedded=true");
         });
+        
+        newItem.find(".itemCoursWatch").on('click',function(){ 
+           window.open("http:"+dataJSON[index].YouTube);
+        });
+        
+        
         }
         
     }

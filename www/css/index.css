@@ -99,7 +99,7 @@ body {
 }
 
 .event.received {
-    background-color:#B51F29;
+    background-color:#ff3300;
     display:none;
 }
 
@@ -133,7 +133,7 @@ body {
 }
 
 .ui-btn {
-    background:#efc6a2 !important;
+    background:#ffcc66 !important;
     border:0 !important;
     color:#ffffff !important;
     text-shadow:0 0 0!important;
@@ -151,8 +151,8 @@ body {
 
 .itemCours {
     border-spacing: 0;
-    border:1px solid #b51f29;
-    background-color:#efc6a2;
+    border:1px solid #ff3300;
+    background-color:#ffcc66;
     margin-left:auto;
     margin-right:auto;
     width:95%;
@@ -183,6 +183,7 @@ body {
     display:table-cell;
     padding-bottom:1.5%;
     padding-top:1.5%;
+    text-shadow:none !important;
 }
 
 .itemCours .itemCoursTitle {
@@ -196,7 +197,7 @@ body {
 }
 
 .itemCours .itemCoursDifficulty {
-    background-color:#b51f29;
+    background-color:#ff3300;
     color:white;
     vertical-align:middle;
     text-align:center;
@@ -210,7 +211,7 @@ body {
     width:100%;
     padding:0 0 0 0;
     margin: 0 0 0 0;
-    border:2px solid #ffffff;
+    border:4px solid #ffffff;
 }
 
 .itemCours .coursProperties {
@@ -229,7 +230,7 @@ body {
     overflow:auto;
     display:table;
     margin-bottom:2%;
-    background-color: #b51f29;
+    background-color: #ff3300;
     color:white;
     padding:2%;
     font-size: 15px;
@@ -243,15 +244,68 @@ body {
     text-align: right;
 }
 
+.itemCoursTab{
+    text-align:center;
+    border:1px solid white;
+    background-color:white;
+    border-top:1px solid #ff3300;
+    border-bottom:1px solid #ff3300;
+    padding-top:3px;
+    padding-bottom:3px;
+}
+ 
+.itemCoursTab a {
+    background-color:white;
+    color:#ff3300 !important;   
+    font-weight: bold !important;
+    font-size: 15px;
+}
+
 .itemCoursWatch{
     text-align:center;
     border:1px solid white;
     background-color:white;
+    border-top:1px solid #ff3300;
+    border-bottom:1px solid #ff3300;
+    padding-top:3px;
+    padding-bottom:3px;
 }
 
 .itemCoursWatch a {
     background-color:white;
-    color:#b51f29 !important;   
+    color:#ff3300 !important;   
     font-weight: bold !important;
     font-size: 15px;
+}
+
+.itemCoursDuration img {
+    vertical-align:bottom;
+}
+
+.itemCoursDuration span {
+    font-size:14px;
+    text-shadow:none !important;
+}
+
+.itemCoursSpacer {
+    width:100%;
+    border:3px solid #ffcc66;
+}
+
+.itemCoursSpacer td {
+    padding-top:1%;
+}
+
+.itemCoursGuitar {
+    padding-bottom:3px;
+}
+
+.itemCoursGuitar span {
+    font-size:14px;
+    text-shadow:none !important; 
+}
+
+.itemCoursFavorite span {
+    font-size:14px;
+    text-shadow:none !important;    
 }

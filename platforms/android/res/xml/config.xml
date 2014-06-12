@@ -57,4 +57,5 @@
     <access origin="http://127.0.0.1*" />
     <access origin="http://code.jquery.com" subdomains="true" />
     <access origin="http://www.galagomusic.com" subdomains="true" />
+    <access origin="https://docs.google.com" subdomains="true" />
 </widget>

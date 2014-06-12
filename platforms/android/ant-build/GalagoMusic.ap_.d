@@ -28,8 +28,11 @@
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/icon.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/config.xml \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/org.apache.cordova.splashscreen \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/com.kernix.pdfviewer \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/org.apache.cordova.splashscreen/www \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/org.apache.cordova.splashscreen/www/splashscreen.js \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/com.kernix.pdfviewer/www \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/plugins/com.kernix.pdfviewer/www/pdfviewer.js \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/screen \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/icon \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/font \
@@ -94,6 +97,7 @@
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/icon/tizen/icon-128.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/font/Signarita.ttf \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/font/YoungAndBeautiful.ttf \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/icone-timer.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/logo.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css/jquery.mobile.icons.min.css \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css/index.css \
