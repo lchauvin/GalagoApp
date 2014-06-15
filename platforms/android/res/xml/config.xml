@@ -58,4 +58,6 @@
     <access origin="http://code.jquery.com" subdomains="true" />
     <access origin="http://www.galagomusic.com" subdomains="true" />
     <access origin="https://docs.google.com" subdomains="true" />
+    <access origin="https://www.paypalobjects.com" subdomains="true" />
+    <access origin="https://www.paypal.com" subdomains="true" />
 </widget>

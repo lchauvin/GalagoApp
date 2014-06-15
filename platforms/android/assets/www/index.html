@@ -55,6 +55,7 @@
         
     document.addEventListener("deviceready",onDeviceReady,false);
     var dataJSON;
+    var dataJSONPaying;
     var db = null;
     
     function onDeviceReady() 
@@ -87,8 +88,10 @@
     
     function getJSONData()
     {
+        //
         // Ajax request
         //
+        
         $url = "http://www.galagomusic.com/JSON/json_get_data.php?user=GalagoTeam&password=GalaTeam";
         $.getJSON($url, function(data) 
                            {
@@ -97,10 +100,18 @@
                            populatePages();
                            displayPages();
                            });
+        
+        $url_paying = "http://www.galagomusic.com/JSON/json_get_paying_data.php?user=GalagoTeam&password=GalaTeam";
+        $.getJSON($url_paying, function(data) 
+                           {
+                           console.log("Successfully got paying data from GalagoMusic");
+                           dataJSONPaying = data;
+                           populateDonate();
+                           });
     }
     
     function populatePages() {
-        for (var i = 0; i < dataJSON.length; i++)
+        for (var i = 0; i < dataJSON.length; ++i)
         {
             populateRecent(i);
             populateDifficulty(i);
@@ -153,13 +164,11 @@
          });
         
         newItem.find(".itemCoursTab").on('click',function(){
-            //alert(encodeURIComponent(dataJSON[index].Tablature));
-            //window.open("https://docs.google.com/viewer?url="+encodeURI(dataJSON[index].Tablature)+"&embedded=true");
             navigator.app.loadUrl(dataJSON[index].Tablature,{openExternal:true});
         });
         
         newItem.find(".itemCoursWatch").on('click',function(){ 
-           window.open("http:"+dataJSON[index].YouTube);
+           navigator.app.loadUrl("http:"+dataJSON[index].YouTube,{openExternal:true});
         });
         
         
@@ -190,6 +199,95 @@
     function populateFavorite(index)
     {
         console.log("Populate Favorite");
+    }
+    
+    function populateDonate()
+    {           
+        var supportTextEnglish = $("<i style='margin-left:1%;'>You have two options to support GalagoMusic:<br>\
+                             <ol>\
+                                 <li>Buy a Galago course</li>\
+                                 <li>Participate to Galagothon</li>\
+                             </ol></i>");
+        var supportTextFrench = $("<i style='margin-left:1%;'>Vous pouvez soutenir GalagoMusic de deux facons:<br>\
+                             <ol>\
+                                 <li>Acheter un cours GalagoMusic</li>\
+                                 <li>Participer au Galagothon</li>\
+                             </ol></i>");
+
+        var payingCourseTitle = $("<div id='payingCourses'><span class='donateTitle'>GalagoCourses / GalagoCours</span></div>");
+
+        var paypalTitle = $("<div id='paypal'><span class='donateTitle'>Galagothon</span></div>");
+
+        $("#donatePage .pageContent").append(supportTextEnglish);
+        $("#donatePage .pageContent").append(supportTextFrench);
+        $("#donatePage .pageContent").append(payingCourseTitle);
+
+        for (var i = 0; i < dataJSONPaying.length; ++i)
+        {
+         insertNewPayingCourse(i);
+        }
+
+        $("#donatePage .pageContent").append(paypalTitle);
+        
+        var galagothon = $('<div id="galagothon" class="one-half-last" style="margin-left:1%;">\
+		<p>Vous appréciez les cours, la méthode et la bonne humeur ? Alors n\'hésitez pas à offrir un coup de pouce à Galagomusic en faisant un don, ceci permettra de perpétuer la qualité du travail proposé. En vous remerciant d\'avance !</br>\
+Musicalement, <br /><i>Eric Legaud</i>.</p>\
+		<div style="float:left; width:100%; height: 151px; background-color:#b51f29; overflow:hidden; margin-top:15px;">\
+			<p style="float: left; font-size: 17px; color: #fff; width: 100%; margin-top: 10px; text-align: center;">Participez à l\'aventure,</br><b>faites un don</b></br>en cliquant ci-dessous.</p>\
+			<form style="width:200px; margin-left:auto;margin-right:auto;"action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">\
+				<input type="hidden" name="cmd" value="_s-xclick">\
+				<input type="hidden" name="hosted_button_id" value="XVDN2ARWSWEPA">\
+				<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - Solution de paiement en ligne la plus sécurisée !">\
+			</form>\
+		</div>\
+	</div>');
+        
+        $("#donatePage .pageContent").append(galagothon);
+    }
+    
+    function insertNewPayingCourse(index)
+    {
+        if (index < dataJSONPaying.length)
+        {
+        var newItem = $("<table class='itemCours'>\
+             <tr class='itemCoursPreview'>\
+                 <td class='itemCoursTitleArtist'>\
+                     <span class='itemCoursTitle'>"+dataJSONPaying[index].Title+"</span>\
+                 </td>\
+             </tr>\
+             <tr class='coursProperties itemCoursWhiteLine'>\
+                 <td></td><td></td>\
+             </tr>\
+             <tr class='coursProperties'>\
+                 <td class='itemCoursDescription'>"+dataJSONPaying[index].Description+"</td>\
+             </tr>\
+             <tr class='coursProperties'>\
+                 <td colspan='2' class='itemCoursWatch'><a>Watch Trailer</a></td>\
+             </tr>\
+             <tr class='coursProperties itemCoursSpacer'>\
+                 <td></td><td></td>\
+             </tr>\
+             <tr class='coursProperties'>\
+                 <td colspan='2' class='itemCoursBuy'><a>Buy</a></td>\
+             </tr>\
+             <tr class='coursProperties itemCoursSpacer'>\
+                 <td></td><td></td>\
+             </tr>\
+         </table>");
+
+         $("#donatePage .pageContent #payingCourses").append(newItem);
+         newItem.find(".itemCoursTitleArtist").on('click', function(){
+             $(newItem).find(".coursProperties").fadeToggle();
+          });
+
+         newItem.find(".itemCoursBuy").on('click',function(){
+             navigator.app.loadUrl(dataJSONPaying[index].Link,{openExternal:true});
+         });
+
+         newItem.find(".itemCoursWatch").on('click',function(){ 
+            navigator.app.loadUrl("http:"+dataJSONPaying[index].YouTube,{openExternal:true});
+         });
+        }
     }
     
     // Display main page after loading data
@@ -307,15 +405,6 @@
     <script type="text/javascript">
       app.initialize();
     </script>
-    
-    <script type="text/javascript">
-        $(".itemCours").on("touchstart", function(event){
-            event.preventDefault();
-            var parent = $(event.target).closest("table");
-            $(parent).children(".coursProperties").slideToggle();
-            alert("test");
-        });
-    </script>   
     
     <script type="text/javascript">
         $(".difficultyTab").on("touchstart",function(event){

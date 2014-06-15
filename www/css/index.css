@@ -256,7 +256,7 @@ body {
  
 .itemCoursTab a {
     background-color:white;
-    color:#ff3300 !important;   
+    color:#ff3300 !important;
     font-weight: bold !important;
     font-size: 15px;
 }
@@ -308,4 +308,36 @@ body {
 .itemCoursFavorite span {
     font-size:14px;
     text-shadow:none !important;    
+}
+
+.donateTitle {
+    width:100%;
+    overflow:auto;
+    display:table;
+    margin-bottom:2%;
+    background-color: #ff3300;
+    color:white;
+    padding:2%;
+    font-size: 15px;
+}
+
+#paypal {
+    margin-top:4%;
+}
+
+.itemCoursBuy {
+    text-align:center;
+    border:1px solid white;
+    background-color:white;
+    border-top:1px solid #ff3300;
+    border-bottom:1px solid #ff3300;
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
+.itemCoursBuy a {
+    background-color:white;
+    color:#ff3300 !important;   
+    font-weight: bold !important;
+    font-size: 15px;
 }
