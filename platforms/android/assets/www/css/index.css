@@ -363,10 +363,23 @@ body {
     display:none;
 }
 
-.isNotFavorite:before {
-    content: "Favorite";
+.isNotFavorite {
+    height:25px;
+    width:25px;
+    background-image: url('../img/nonFavoriteIcon.png');
+    background-repeat: no-repeat;
+    display:block;
+    margin-right:0;
+    margin-left:auto;
+    
 }
 
-.isFavorite:before {
-    content: "Remove";
+.isFavorite {
+    height:25px;
+    width:25px;
+    background-image: url('../img/FavoriteIcon.png');
+    background-repeat: no-repeat;
+    display:block;
+    margin-right:0;
+    margin-left:auto;
 }

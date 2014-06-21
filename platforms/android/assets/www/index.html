@@ -67,7 +67,7 @@
     
     function createDB(tx)
     {
-        tx.executeSql("DROP TABLE IF EXISTS GalagoFavs");
+        //tx.executeSql("DROP TABLE IF EXISTS GalagoFavs");
         tx.executeSql("CREATE TABLE IF NOT EXISTS GalagoFavs (id unique)");
     }
     
@@ -107,13 +107,20 @@
         {
             addNewItem(i);
         }
+        
+        if (db !== null)
+        {
+            db.transaction(function(tx){
+               checkFavorites(tx); 
+            });
+        }
     }
     
     function addNewItem(index)
     {
         if (index < dataJSON.length)
         {
-        var newItem = $("<table class='itemCours' index='"+index+"'>\
+        var newItem = $("<table class='itemCours "+dataJSON[index].ID+"' index='"+index+"'>\
                                 <tr class='itemCoursPreview'>\
                                     <td class='itemCoursTitleArtist'>\
                                         <span class='itemCoursTitle'>"+dataJSON[index].Title+"</span><br/>\
@@ -127,7 +134,7 @@
                                 </tr>\
                                 <tr class='coursProperties'>\
                                     <td class='itemCoursDuration'><img src='img/icone-timer.png'></img><span> "+dataJSON[index].Duration+"</span></td>\
-                                    <td class='itemCoursFavorite'><span class='isNotFavorite'></span></td>\
+                                    <td class='itemCoursFavorite' rowspan='2'><span class='isNotFavorite'></span></td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
                                     <td class='itemCoursGuitar'><span>"+dataJSON[index].Instrument+"</span></td>\
@@ -146,60 +153,25 @@
                                 </tr>\
                             </table>");
         
-        if (db !== null)
-        {
-            db.transaction(function(tx){
-               checkIfFavorite(tx,$(newItem),index,false); 
-            });
-        }
-        
         $("#recentPage .pageContent").append($(newItem).clone());
         $("#difficultyPage .pageContent #diff"+dataJSON[index].Difficulty+" .difficultyCours").append($(newItem).clone());
-
         }
         
     }
-    
-    function checkIfFavorite(tx,item,index,clicked)
+   
+    function checkFavorites(tx)
     {
-        var sqlQuery = "SELECT * FROM GalagoFavs WHERE id='"+dataJSON[index].ID+"'";
+        var sqlQuery = "SELECT * FROM GalagoFavs";
         tx.executeSql(sqlQuery,[],function(tx,results){
-            if (clicked)
+            var numberOfFavorites = results.rows.length;
+            for (var i = 0; i < numberOfFavorites; ++i)
             {
-                if (results.rows.length > 0)
-                {
-                    console.log("Favorite: Remove it");
-                    var removeSqlQuery = "DELETE FROM GalagoFavs WHERE id=?";
-                    tx.executeSql(removeSqlQuery, [dataJSON[index].ID],function(){
-                        $("#favoritePage .pageContent #favorite"+dataJSON[index].ID).remove();
-                    });
-                }
-                else
-                {
-                    console.log("Not a favorite: add it");
-                    var insertSqlQuery = "INSERT INTO GalagoFavs (id) VALUES (?)";
-                    tx.executeSql(insertSqlQuery,[dataJSON[index].ID],function(){
-                        $(item).find(".itemFavorite span").toggleClass("isFavorite").toggleClass("isNotFavorite");
-                        var clonedItem = $(item).clone();
-                        clonedItem.find(".coursProperties").hide();
-                        clonedItem.attr('id','favorite'+dataJSON[index].ID);
-                        $("#favoritePage .pageContent").append($(clonedItem));
-                    });
-                }
+                console.log("Populate new favorite");
+                $(".pageContent ."+results.rows.item(i).id+" .itemCoursFavorite span").removeClass("isNotFavorite").addClass("isFavorite");
+                $("#favoritePage .pageContent").append($("#recentPage .pageContent ."+results.rows.item(i).id).clone());
+                
             }
-            else
-            {
-                if (results.rows.length > 0)
-                {   
-                    console.log("Already in the DB");
-                    $(item).find(".itemFavorite span").toggleClass("isFavorite").toggleClass("isNotFavorite");
-                    var clonedItem = $(item).clone();
-                    clonedItem.find(".coursProperties").hide();
-                    clonedItem.attr('id','favorite'+dataJSON[index].ID);
-                    $("#favoritePage .pageContent").append($(clonedItem));
-                }
-            }
-        },favoriteError);
+        });
     }
     
     function favoriteError(tx,err)
@@ -446,12 +418,40 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
             navigator.app.loadUrl("http:"+dataJSON[Number(parent.attr('index'))].YouTube,{openExternal:true});
         });
         
-        $(document).on('click',".pageContent .itemCours .itemCoursFavorite",function(){
+        $(document).on('click',".pageContent .itemCours .isNotFavorite",function(){
             var parent = $(this).closest(".itemCours");
             var index = Number(parent.attr('index'));
-            db.transaction(function(tx){          
-                checkIfFavorite(tx,$(parent),index,true);
-            });
+            
+            if (db !== null)
+            {
+                db.transaction(function(tx){
+                    var sqlQuery = "INSERT INTO GalagoFavs (id) VALUES (?)";
+                    tx.executeSql(sqlQuery,[dataJSON[index].ID],function(){
+                            console.log("Add new favorite: "+dataJSON[index].ID);
+                            $(".pageContent ."+dataJSON[index].ID+" .isNotFavorite").removeClass("isNotFavorite").addClass("isFavorite");
+                            var clonedItem = $(parent).clone();
+                            clonedItem.find(".coursProperties").hide();
+                            $("#favoritePage .pageContent").append($(clonedItem));     
+                    });
+                });
+            }
+        });
+        
+        $(document).on('click',".pageContent .itemCours .isFavorite",function(){
+            var parent = $(this).closest(".itemCours");
+            var index = Number(parent.attr('index'));
+        
+            if (db !== null)
+            {
+                db.transaction(function(tx){
+                    var sqlQuery = "DELETE FROM GalagoFavs WHERE id=?";
+                    tx.executeSql(sqlQuery,[dataJSON[index].ID],function(){                  
+                            console.log("Remove from DB favorite: "+dataJSON[index].ID);
+                            $(".pageContent ."+dataJSON[index].ID+" .isFavorite").removeClass("isFavorite").addClass("isNotFavorite");   
+                            $("#favoritePage .pageContent ."+dataJSON[index].ID).remove();
+                    });
+                });
+            }
         });
 
         $(document).on('click',".pageContent .itemCours .itemCoursBuy",function(){
@@ -463,9 +463,7 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
             var parent = $(this).closest(".itemCours");
             navigator.app.loadUrl("http:"+dataJSONPaying[Number(parent.attr('index'))].YouTube,{openExternal:true});
         });
-    </script>
-    
-    <script type="text/javascript">
+        
         $(document).on('click',".pageContent .difficultyTab",function(){
            var parent = $(this).closest("div");
            $(parent).find(".difficultyCours").fadeToggle();

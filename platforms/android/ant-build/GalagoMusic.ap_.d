@@ -97,8 +97,9 @@
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/icon/tizen/icon-128.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/font/Signarita.ttf \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/res/font/YoungAndBeautiful.ttf \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/FavoriteIcon.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/icone-timer.png \
-/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/logo.png \
+/home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/img/nonFavoriteIcon.png \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css/jquery.mobile.icons.min.css \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css/index.css \
 /home/snr/AndroidApp/GalagoMusic/platforms/android/assets/www/css/GalagoTheme.min.css \
