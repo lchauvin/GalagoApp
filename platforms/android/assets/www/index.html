@@ -166,7 +166,6 @@
             var numberOfFavorites = results.rows.length;
             for (var i = 0; i < numberOfFavorites; ++i)
             {
-                console.log("Populate new favorite");
                 $(".pageContent ."+results.rows.item(i).id+" .itemCoursFavorite span").removeClass("isNotFavorite").addClass("isFavorite");
                 $("#favoritePage .pageContent").append($("#recentPage .pageContent ."+results.rows.item(i).id).clone());
             }
@@ -195,7 +194,7 @@
 
         var paypalTitle = $("<div id='paypal'><span class='donateTitle'>Galagothon</span></div>");
 
-        var galagothon = $('<div id="galagothon" class="one-half-last" style="margin-left:1%;">\
+        var galagothon = $('<div id="galagothon" class="one-half-last">\
 		<p>Vous appréciez les cours, la méthode et la bonne humeur ? Alors n\'hésitez pas à offrir un coup de pouce à Galagomusic en faisant un don, ceci permettra de perpétuer la qualité du travail proposé. En vous remerciant d\'avance !</br>\
 Musicalement, <br /><i>Eric Legaud</i>.</p>\
 		<div style="float:left; width:100%; height: 151px; background-color:#b51f29; overflow:hidden; margin-top:15px;">\
@@ -260,7 +259,6 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
     //
     function displayPages() 
     {
-        console.log("Show mainApp");
         $("body #splashScreen").fadeOut(10, function() {
       	$("body #mainApp").fadeIn(10);
       	});
@@ -426,7 +424,6 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
                 db.transaction(function(tx){
                     var sqlQuery = "INSERT INTO GalagoFavs (id) VALUES (?)";
                     tx.executeSql(sqlQuery,[dataJSON[index].ID],function(){
-                            console.log("Add new favorite: "+dataJSON[index].ID);
                             $(".pageContent ."+dataJSON[index].ID+" .isNotFavorite").removeClass("isNotFavorite").addClass("isFavorite");
                             var clonedItem = $(parent).clone();
                             clonedItem.find(".coursProperties").hide();
@@ -445,7 +442,6 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
                 db.transaction(function(tx){
                     var sqlQuery = "DELETE FROM GalagoFavs WHERE id=?";
                     tx.executeSql(sqlQuery,[dataJSON[index].ID],function(){                  
-                            console.log("Remove from DB favorite: "+dataJSON[index].ID);
                             $(".pageContent ."+dataJSON[index].ID+" .isFavorite").removeClass("isFavorite").addClass("isNotFavorite");   
                             $("#favoritePage .pageContent ."+dataJSON[index].ID).remove();
                     });
