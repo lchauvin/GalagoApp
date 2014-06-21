@@ -169,7 +169,6 @@
                 console.log("Populate new favorite");
                 $(".pageContent ."+results.rows.item(i).id+" .itemCoursFavorite span").removeClass("isNotFavorite").addClass("isFavorite");
                 $("#favoritePage .pageContent").append($("#recentPage .pageContent ."+results.rows.item(i).id).clone());
-                
             }
         });
     }
