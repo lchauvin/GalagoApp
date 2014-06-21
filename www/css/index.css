@@ -42,8 +42,7 @@ body {
     width:100%;                   /* text area width */
     text-align:center;
     padding:0px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    /*display:table;*/
-    display:none;
+    display:table;
 
     background-color:#DC8E53;
     /* IE10 Consumer Preview */ 
@@ -81,7 +80,7 @@ body {
 }
 
 #mainApp {
-    /*display:none;*/
+    display:none;
 }
 
 .event {
