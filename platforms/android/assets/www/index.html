@@ -61,29 +61,23 @@
     function onDeviceReady() 
     {    
         db = window.openDatabase("GalagoFavs", "1.0", "GalagoFavs", 200000);
-        db.transaction(createDB,successDB,errorDB);
+        db.transaction(createDB,errorDB,successDB);
         getJSONData();
     }
     
     function createDB(tx)
     {
+        tx.executeSql("DROP TABLE IF EXISTS GalagoFavs");
         tx.executeSql("CREATE TABLE IF NOT EXISTS GalagoFavs (id unique)");
     }
     
     function successDB()
     {
-        
     }
     
-    function errorDB()
+    function errorDB(tx,err)
     {
-        
-    }
-    
-    function queryDB(tx,index)
-    {
-        tx.executeSql("SELECT id FROM GalagoFavs WHERE id='"+index+"'",
-                        populateFavorite(index));
+        alert("Database creation failed ("+err+")");
     }
     
     function getJSONData()
@@ -95,7 +89,6 @@
         $url = "http://www.galagomusic.com/JSON/json_get_data.php?user=GalagoTeam&password=GalaTeam";
         $.getJSON($url, function(data) 
                            {
-                           console.log("Successfully got data from GalagoMusic");
                            dataJSON = data;
                            populatePages();
                            displayPages();
@@ -104,7 +97,6 @@
         $url_paying = "http://www.galagomusic.com/JSON/json_get_paying_data.php?user=GalagoTeam&password=GalaTeam";
         $.getJSON($url_paying, function(data) 
                            {
-                           console.log("Successfully got paying data from GalagoMusic");
                            dataJSONPaying = data;
                            populateDonate();
                            });
@@ -113,19 +105,15 @@
     function populatePages() {
         for (var i = 0; i < dataJSON.length; ++i)
         {
-            populateRecent(i);
-            populateDifficulty(i);
-            db.transaction(function(tx){queryDB(tx,i);});
+            addNewItem(i);
         }
     }
     
-    function populateRecent(index)
+    function addNewItem(index)
     {
         if (index < dataJSON.length)
         {
-        console.log("Populate recent");
-        
-        var newItem = $("<table class='itemCours'>\
+        var newItem = $("<table class='itemCours' index='"+index+"'>\
                                 <tr class='itemCoursPreview'>\
                                     <td class='itemCoursTitleArtist'>\
                                         <span class='itemCoursTitle'>"+dataJSON[index].Title+"</span><br/>\
@@ -139,7 +127,7 @@
                                 </tr>\
                                 <tr class='coursProperties'>\
                                     <td class='itemCoursDuration'><img src='img/icone-timer.png'></img><span> "+dataJSON[index].Duration+"</span></td>\
-                                    <td class='itemCoursFavorite'><span>Favorite</span></td>\
+                                    <td class='itemCoursFavorite'><span class='isNotFavorite'></span></td>\
                                 </tr>\
                                 <tr class='coursProperties'>\
                                     <td class='itemCoursGuitar'><span>"+dataJSON[index].Instrument+"</span></td>\
@@ -158,47 +146,65 @@
                                 </tr>\
                             </table>");
         
-        $("#recentPage .pageContent").append(newItem);
-        newItem.find(".itemCoursTitleArtist").on('click', function(){
-            $(newItem).find(".coursProperties").fadeToggle();
-         });
-        
-        newItem.find(".itemCoursTab").on('click',function(){
-            navigator.app.loadUrl(dataJSON[index].Tablature,{openExternal:true});
-        });
-        
-        newItem.find(".itemCoursWatch").on('click',function(){ 
-           navigator.app.loadUrl("http:"+dataJSON[index].YouTube,{openExternal:true});
-        });
-        
-        
-        }
-        
-    }
-    
-    function populateDifficulty(index)
-    {
-        if (index < dataJSON.length)
+        if (db !== null)
         {
-            console.log("Populate Difficulty");
-            $("#difficultyPage .pageContent #diff"+dataJSON[index].Difficulty).append(
-                            "<div class='itemCours'>\
-                                <div class='TitleArtist'>\
-                                    <span class='Title'>"
-                                    +dataJSON[index].Title+"</span><br/>\
-                                    <span class='Artist'>"
-                                    +dataJSON[index].Artist+"</span>\
-                                </div>\
-                                <div class='Difficulty'>DIFFICULTY<br />"
-                                    +dataJSON[index].Difficulty+" / 10\
-                                </div>\
-                            </div>").children(".itemCours").hide();
+            db.transaction(function(tx){
+               checkIfFavorite(tx,$(newItem),index,false); 
+            });
         }
+        
+        $("#recentPage .pageContent").append($(newItem).clone());
+        $("#difficultyPage .pageContent #diff"+dataJSON[index].Difficulty+" .difficultyCours").append($(newItem).clone());
+
+        }
+        
     }
     
-    function populateFavorite(index)
+    function checkIfFavorite(tx,item,index,clicked)
     {
-        console.log("Populate Favorite");
+        var sqlQuery = "SELECT * FROM GalagoFavs WHERE id='"+dataJSON[index].ID+"'";
+        tx.executeSql(sqlQuery,[],function(tx,results){
+            if (clicked)
+            {
+                if (results.rows.length > 0)
+                {
+                    console.log("Favorite: Remove it");
+                    var removeSqlQuery = "DELETE FROM GalagoFavs WHERE id=?";
+                    tx.executeSql(removeSqlQuery, [dataJSON[index].ID],function(){
+                        $("#favoritePage .pageContent #favorite"+dataJSON[index].ID).remove();
+                    });
+                }
+                else
+                {
+                    console.log("Not a favorite: add it");
+                    var insertSqlQuery = "INSERT INTO GalagoFavs (id) VALUES (?)";
+                    tx.executeSql(insertSqlQuery,[dataJSON[index].ID],function(){
+                        $(item).find(".itemFavorite span").toggleClass("isFavorite").toggleClass("isNotFavorite");
+                        var clonedItem = $(item).clone();
+                        clonedItem.find(".coursProperties").hide();
+                        clonedItem.attr('id','favorite'+dataJSON[index].ID);
+                        $("#favoritePage .pageContent").append($(clonedItem));
+                    });
+                }
+            }
+            else
+            {
+                if (results.rows.length > 0)
+                {   
+                    console.log("Already in the DB");
+                    $(item).find(".itemFavorite span").toggleClass("isFavorite").toggleClass("isNotFavorite");
+                    var clonedItem = $(item).clone();
+                    clonedItem.find(".coursProperties").hide();
+                    clonedItem.attr('id','favorite'+dataJSON[index].ID);
+                    $("#favoritePage .pageContent").append($(clonedItem));
+                }
+            }
+        },favoriteError);
+    }
+    
+    function favoriteError(tx,err)
+    {
+        alert("Couldn't add favorite ("+err+")");
     }
     
     function populateDonate()
@@ -218,17 +224,6 @@
 
         var paypalTitle = $("<div id='paypal'><span class='donateTitle'>Galagothon</span></div>");
 
-        $("#donatePage .pageContent").append(supportTextEnglish);
-        $("#donatePage .pageContent").append(supportTextFrench);
-        $("#donatePage .pageContent").append(payingCourseTitle);
-
-        for (var i = 0; i < dataJSONPaying.length; ++i)
-        {
-         insertNewPayingCourse(i);
-        }
-
-        $("#donatePage .pageContent").append(paypalTitle);
-        
         var galagothon = $('<div id="galagothon" class="one-half-last" style="margin-left:1%;">\
 		<p>Vous appréciez les cours, la méthode et la bonne humeur ? Alors n\'hésitez pas à offrir un coup de pouce à Galagomusic en faisant un don, ceci permettra de perpétuer la qualité du travail proposé. En vous remerciant d\'avance !</br>\
 Musicalement, <br /><i>Eric Legaud</i>.</p>\
@@ -241,7 +236,18 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
 			</form>\
 		</div>\
 	</div>');
-        
+
+
+        $("#donatePage .pageContent").append(supportTextEnglish);
+        $("#donatePage .pageContent").append(supportTextFrench);
+        $("#donatePage .pageContent").append(payingCourseTitle);
+
+        for (var i = 0; i < dataJSONPaying.length; ++i)
+        {
+            insertNewPayingCourse(i);
+        }
+
+        $("#donatePage .pageContent").append(paypalTitle);
         $("#donatePage .pageContent").append(galagothon);
     }
     
@@ -249,7 +255,7 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
     {
         if (index < dataJSONPaying.length)
         {
-        var newItem = $("<table class='itemCours'>\
+        var newItem = $("<table class='itemCours' id='"+dataJSONPaying[index].ID+"' index='"+index+"'>\
              <tr class='itemCoursPreview'>\
                  <td class='itemCoursTitleArtist'>\
                      <span class='itemCoursTitle'>"+dataJSONPaying[index].Title+"</span>\
@@ -262,7 +268,7 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
                  <td class='itemCoursDescription'>"+dataJSONPaying[index].Description+"</td>\
              </tr>\
              <tr class='coursProperties'>\
-                 <td colspan='2' class='itemCoursWatch'><a>Watch Trailer</a></td>\
+                 <td colspan='2' class='itemCoursWatchTrailer'><a>Watch Trailer</a></td>\
              </tr>\
              <tr class='coursProperties itemCoursSpacer'>\
                  <td></td><td></td>\
@@ -276,17 +282,6 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
          </table>");
 
          $("#donatePage .pageContent #payingCourses").append(newItem);
-         newItem.find(".itemCoursTitleArtist").on('click', function(){
-             $(newItem).find(".coursProperties").fadeToggle();
-          });
-
-         newItem.find(".itemCoursBuy").on('click',function(){
-             navigator.app.loadUrl(dataJSONPaying[index].Link,{openExternal:true});
-         });
-
-         newItem.find(".itemCoursWatch").on('click',function(){ 
-            navigator.app.loadUrl("http:"+dataJSONPaying[index].YouTube,{openExternal:true});
-         });
         }
     }
     
@@ -295,7 +290,6 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
     function displayPages() 
     {
         console.log("Show mainApp");
-        //$("#recentPage .pageContent .itemCours:lt(5)").css("display","table");
         $("body #splashScreen").fadeOut(10, function() {
       	$("body #mainApp").fadeIn(10);
       	});
@@ -348,16 +342,46 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
             </div>
             
             <div class="pageContent" data-role="content">
-                <div id="diff1"><span class="difficultyTab">Difficulty 1 / 10</span></div>
-                <div id="diff2"><span class="difficultyTab">Difficulty 2 / 10</span></div>
-                <div id="diff3"><span class="difficultyTab">Difficulty 3 / 10</span></div>
-                <div id="diff4"><span class="difficultyTab">Difficulty 4 / 10</span></div>
-                <div id="diff5"><span class="difficultyTab">Difficulty 5 / 10</span></div>
-                <div id="diff6"><span class="difficultyTab">Difficulty 6 / 10</span></div>
-                <div id="diff7"><span class="difficultyTab">Difficulty 7 / 10</span></div>
-                <div id="diff8"><span class="difficultyTab">Difficulty 8 / 10</span></div>
-                <div id="diff9"><span class="difficultyTab">Difficulty 9 / 10</span></div>
-                <div id="diff10"><span class="difficultyTab">Difficulty 10 / 10</span></div>
+                <div id="diff1">
+                    <span class="difficultyTab">Difficulty 1 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff2">
+                    <span class="difficultyTab">Difficulty 2 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff3">
+                    <span class="difficultyTab">Difficulty 3 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff4">
+                    <span class="difficultyTab">Difficulty 4 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff5">
+                    <span class="difficultyTab">Difficulty 5 / 10</span>
+                    <div class="difficultyCours"></div> 
+                </div>
+                <div id="diff6">
+                    <span class="difficultyTab">Difficulty 6 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff7">
+                    <span class="difficultyTab">Difficulty 7 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff8">
+                    <span class="difficultyTab">Difficulty 8 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff9">
+                    <span class="difficultyTab">Difficulty 9 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
+                <div id="diff10">
+                    <span class="difficultyTab">Difficulty 10 / 10</span>
+                    <div class="difficultyCours"></div>
+                </div>
             </div>
             
         </div>
@@ -407,9 +431,44 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
     </script>
     
     <script type="text/javascript">
-        $(".difficultyTab").on("touchstart",function(event){
-           var parent = $(event.target).closest("div");
-           $(parent).children(".itemCours").fadeToggle();
+        $(document).on('click',".pageContent .itemCours .itemCoursTitleArtist", function(){
+           var parent = $(this).closest(".itemCours");
+           $(parent).find(".coursProperties").fadeToggle();
+        });
+      
+        $(document).on('click',".pageContent .itemCours .itemCoursTab",function(){
+              var parent = $(this).closest(".itemCours");
+              navigator.app.loadUrl(dataJSON[Number(parent.attr('index'))].Tablature,{openExternal:true});
+          });
+        
+        $(document).on('click',".pageContent .itemCours .itemCoursWatch",function(){
+            var parent = $(this).closest(".itemCours");
+            navigator.app.loadUrl("http:"+dataJSON[Number(parent.attr('index'))].YouTube,{openExternal:true});
+        });
+        
+        $(document).on('click',".pageContent .itemCours .itemCoursFavorite",function(){
+            var parent = $(this).closest(".itemCours");
+            var index = Number(parent.attr('index'));
+            db.transaction(function(tx){          
+                checkIfFavorite(tx,$(parent),index,true);
+            });
+        });
+
+        $(document).on('click',".pageContent .itemCours .itemCoursBuy",function(){
+            var parent = $(this).closest(".itemCours");
+            navigator.app.loadUrl(dataJSONPaying[Number(parent.attr('index'))].Link,{openExternal:true});
+        });
+        
+        $(document).on('click',".pageContent .itemCours .itemCoursWatchTrailer",function(){
+            var parent = $(this).closest(".itemCours");
+            navigator.app.loadUrl("http:"+dataJSONPaying[Number(parent.attr('index'))].YouTube,{openExternal:true});
+        });
+    </script>
+    
+    <script type="text/javascript">
+        $(document).on('click',".pageContent .difficultyTab",function(){
+           var parent = $(this).closest("div");
+           $(parent).find(".difficultyCours").fadeToggle();
         });
     </script>
     
