@@ -331,14 +331,11 @@ body {
     overflow:auto;
     display:table;
     margin-bottom:2%;
+    margin-top:4%;
     background-color: #ff3300;
     color:white;
     padding:2%;
     font-size: 15px;
-}
-
-#paypal {
-    margin-top:4%;
 }
 
 .itemCoursBuy {

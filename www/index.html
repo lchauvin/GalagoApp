@@ -179,25 +179,27 @@
     
     function populateDonate()
     {           
-        var supportTextEnglish = $("<i style='margin-left:1%;'>You have two options to support GalagoMusic:<br>\
-                             <ol>\
-                                 <li>Buy a Galago course</li>\
-                                 <li>Participate to Galagothon</li>\
-                             </ol></i>");
-        var supportTextFrench = $("<i style='margin-left:1%;'>Vous pouvez soutenir GalagoMusic de deux facons:<br>\
-                             <ol>\
-                                 <li>Acheter un cours GalagoMusic</li>\
+        var supportText = $("<div style='padding:2px;margin-right:1%;margin-left:1%;'>\
+			     <i><ins>Vous pouvez soutenir GalagoMusic de deux facons:</ins><br>\
+                             <ol style='margin:1px;'>\
                                  <li>Participer au Galagothon</li>\
-                             </ol></i>");
+                                 <li>Acheter un cours GalagoMusic</li>\
+                             </ol></i><br />\
+			     <i><ins>You have two options to support GalagoMusic:</ins><br>\
+                             <ol style='margin:1px;'>\
+                                 <li>Participate to Galagothon</li>\
+                                 <li>Buy a Galago course</li>\
+                             </ol></i>\
+			     </div>");
 
-        var payingCourseTitle = $("<div id='payingCourses'><span class='donateTitle'>GalagoCourses / GalagoCours</span></div>");
+        var payingCourseTitle = $("<div id='payingCourses'><span class='donateTitle'>Cours Payants</span></div>");
 
         var paypalTitle = $("<div id='paypal'><span class='donateTitle'>Galagothon</span></div>");
 
         var galagothon = $('<div id="galagothon" class="one-half-last">\
-		<p>Vous appréciez les cours, la méthode et la bonne humeur ? Alors n\'hésitez pas à offrir un coup de pouce à Galagomusic en faisant un don, ceci permettra de perpétuer la qualité du travail proposé. En vous remerciant d\'avance !</br>\
+		<p>Vous appréciez les cours, la méthode et la bonne humeur ? <br />Alors n\'hésitez pas à offrir un coup de pouce à Galagomusic en faisant un don, ceci permettra de perpétuer la qualité du travail proposé. <br />En vous remerciant d\'avance !<br />\
 Musicalement, <br /><i>Eric Legaud</i>.</p>\
-		<div style="float:left; width:100%; height: 151px; background-color:#b51f29; overflow:hidden; margin-top:15px;">\
+		<div style="float:left; width:100%; height: 151px; background-color:#b51f29; overflow:hidden; margin-top:5px;margin-bottom:10px;">\
 			<p style="float: left; font-size: 17px; color: #fff; width: 100%; margin-top: 10px; text-align: center;">Participez à l\'aventure,</br><b>faites un don</b></br>en cliquant ci-dessous.</p>\
 			<form style="width:200px; margin-left:auto;margin-right:auto;"action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">\
 				<input type="hidden" name="cmd" value="_s-xclick">\
@@ -205,20 +207,18 @@ Musicalement, <br /><i>Eric Legaud</i>.</p>\
 				<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - Solution de paiement en ligne la plus sécurisée !">\
 			</form>\
 		</div>\
-	</div>');
+	</div><br />');
 
 
-        $("#donatePage .pageContent").append(supportTextEnglish);
-        $("#donatePage .pageContent").append(supportTextFrench);
+        $("#donatePage .pageContent").append(supportText);
+        $("#donatePage .pageContent").append(paypalTitle);
+        $("#donatePage .pageContent").append(galagothon);
         $("#donatePage .pageContent").append(payingCourseTitle);
 
         for (var i = 0; i < dataJSONPaying.length; ++i)
         {
             insertNewPayingCourse(i);
         }
-
-        $("#donatePage .pageContent").append(paypalTitle);
-        $("#donatePage .pageContent").append(galagothon);
     }
     
     function insertNewPayingCourse(index)
